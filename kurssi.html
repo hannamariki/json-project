@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="fi">
+    <head>
+        <title>JSON Example</title>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+    </head>
+    <body>
+        <div id="vastaus"></div>
+        <button onclick="navigateToToteutus()">Siirry toteutukselle tästä</button>
+        <script>
+            fetch('https://run.mocky.io/v3/0ba209bf-7e12-4355-a498-fe73de81e369')
+            .then(function(response) {
+                return response.json();
+            })
+            .then(function(responseJson) {
+                console.log(responseJson);
+                    kerro(responseJson);
+            })
+            .catch(function(error) {
+                document.getElementById("vastaus").innerHTML =
+                    "<p>Tietoa ei pystytä hakemaan</p>";
+                    console.log(error); 
+            });
+
+            function kerro(data){
+
+                    var teksti = "<h1>" + data.otsikko + "</h1>";
+                        teksti = teksti + "<p>" + data.kuvaus + "</p>";
+                        teksti = teksti + "<p><img src='" + data.kuva + "' alt='kuva' ></p>";
+                        teksti = teksti + "<h3>Opintojakso: " + data.opintojakso.nimi + " " + data.opintojakso.tunnus + " " + data.opintojakso.opintopisteet + " op"+"</h3>";
+                        teksti = teksti + "<ul>"
+                          
+                            for (var i = 0; i < data.opintojakso.sisalto.length; i++) {
+                            teksti += "<li>" + data.opintojakso.sisalto[i] + "</li>"
+                            }
+
+                            teksti += "</ul>";
+                            teksti += "<h3>Linkit</h3><ul>";
+
+
+                            for (var j = 0; j < data.tekniikat.length; j++) {
+                                teksti += "<li>" + data.tekniikat[j].aihe + " <a href='" + data.tekniikat[j].linkki + "'>" + data.tekniikat[j].linkki + "</a></li>";
+
+                            }
+                            teksti += "</ul>";
+                           
+
+                document.getElementById("vastaus").innerHTML = teksti;
+                   
+                                }
+                                function navigateToToteutus() {
+                window.location.href = "toteutus.html";
+        }
+        </script>
+    </body>
+</html>
+

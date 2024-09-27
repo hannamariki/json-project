@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="fi">
+    <head>
+        <title>Tapahtumat </title>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+    </head>
+    <button onclick="navigateToSaa()">Sää</button>
+    <div id="vastaus"></div>
+   
+
+<body>
+    
+<script>
+     fetch('https://api.visittampere.com/api/v1/visittampere/event/published/all/?for mat=json&lang=fi')
+        .then(function(response) {
+            return response.json(); 
+        })
+        .then(function(responseJson) {
+            console.log(responseJson); 
+            tapahtumat(responseJson);  
+        })
+        .catch(function(error) {
+            document.getElementById("vastaus").innerHTML =
+                "<p>Tietoa ei pystytä hakemaan</p>"; 
+            console.log(error); 
+        });
+
+        function tapahtumat(data){
+            var teksti = "";
+
+            teksti = "<h1>Tampereella tapahtuu</h1>";
+            for (var i = 0; i < data.length; i++){
+                teksti = teksti + "<h3>" + data[i].slug+"</h3>";
+                teksti = teksti + "<p>" + data [i].description + "</p>";
+                teksti = teksti + "<p> <a href=" + data[i].url + ">" + data[i].url + "</a></p>";
+            }
+    
+            document.getElementById("vastaus").innerHTML = teksti;
+        }
+
+    function navigateToSaa() {
+            window.location.href = "saa.html";
+            }
+
+</script>
+</body>
