@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="fi">
+<head>
+    <title>JSON Example</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" type="text/css" href="tyylit.css">
+</head>
+<body>
+    <div id="vastaus"></div>
+    <button onclick="navigateToKurssi()">Siirry kurssi-sivulle tästä</button>
+    <script>
+       
+        fetch('https://run.mocky.io/v3/7d67c4d0-50b2-4b67-8eca-f5d89edc26c3')
+        .then(function(response) {
+            return response.json(); 
+        })
+        .then(function(responseJson) {
+            console.log(responseJson); 
+            kerro(responseJson);  
+        })
+        .catch(function(error) {
+            document.getElementById("vastaus").innerHTML =
+                "<p>Tietoa ei pystytä hakemaan</p>"; 
+            console.log(error); 
+        });
+
+        function kerro(data) {
+            var teksti = "<h1>" + data.toteutus.nimi + "</h1>";  
+            teksti += "<p>Osallistujien lukumäärä: " + data.toteutus.osallistujat.lukumaara + "</p>"; 
+            teksti += "<p>Osallistujien nimet:</p>";
+            teksti += "<ul>"; 
+            for (var i = 0; i < data.toteutus.osallistujat.nimet.length; i++) {
+                teksti += "<li>" + data.toteutus.osallistujat.nimet[i] + "</li>"; 
+            }
+            teksti += "</ul>"; 
+
+            teksti += "<p>Aikataulu: " + data.toteutus.aikataulu.alkamisaika + " - " + data.toteutus.aikataulu.loppumisaika + "</p>";   
+            teksti += "<p>Kesto viikkoina: " + data.toteutus.aikataulu.kesto_viikkoina + "</p>"; 
+            teksti += "<div class = 'kuva-container'>";
+            teksti += "<img class='kuva' src='" + data.toteutus.kuva + "' alt='Kuva' >";  
+            teksti+= "</div>";
+
+           
+            document.getElementById("vastaus").innerHTML = teksti;
+        }
+        function navigateToKurssi() {
+            window.location.href = "kurssi.html";
+        }
+    </script>
+</body>
+</html>

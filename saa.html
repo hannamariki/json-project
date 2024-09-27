@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="fi">
+<head>
+    <title>Sää </title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" type="text/css" href="saaTyylit.css">
+</head>
+<body>
+    
+    <h1>Sää - siitä aina on jotain kerrottavaa</h1>
+    <p>Millainen sää Helsingissä on? Entä Tampereella?</p>
+
+   
+    <div class="container">
+        <div id="helsinki" class="kaupunki">
+            <h2>Helsinki</h2>
+            <ul></ul>
+        </div>
+        <div id="tampere" class="kaupunki">
+            <h2>Tampere</h2>
+            <ul></ul>
+        </div>
+    </div>
+
+    <button onclick="navigateToTapahtumat()">Tapahtumat</button>
+
+    <script>
+    function haeSaa(kaupunki, id) {
+        fetch(`https://api.openweathermap.org/data/2.5/weather?lang=fi&q=${kaupunki}&units=metric&APPID=314de1b8dabfbace7321a5ff474e27d1`)
+        .then(function(response) {
+            return response.json(); 
+        })
+        .then(function(responseJson) {
+            console.log(responseJson); 
+            saa(responseJson, id);  
+        })
+        .catch(function(error) {
+            document.getElementById(id).innerHTML =
+                "<p>Tietoa ei pystytä hakemaan</p>"; 
+            console.log(error); 
+        });
+    }
+
+    function saa(data, id) {
+        var teksti = "";
+
+        teksti += "<li>Säätila: " + data.weather[0].description + "</li>";
+        teksti += "<li>Lämpötila: " + data.main.temp + "&deg;C</li>";
+        teksti += "<li>Tuulen nopeus: " + data.wind.speed + " m/s</li>";
+
+        var kuva = 'http://openweathermap.org/img/w/' + data.weather[0].icon + '.png';
+        teksti += "<img src='" + kuva + "' alt='Säätila'>";
+
+        document.querySelector(`#${id} ul`).innerHTML = teksti;
+    }
+
+    haeSaa("helsinki", "helsinki");
+    haeSaa("tampere", "tampere");
+
+    function navigateToTapahtumat() {
+        window.location.href = "tapahtumat.html";
+    }
+    </script>
+</body>
+</html>
